@@ -4,6 +4,7 @@ package com.example.demo.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="users")
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,6 +25,9 @@ public class User {
 
     @Column(nullable=false, unique = true)
     private String email;
+
+    @Column(nullable=false)
+    private LocalDateTime createdAt;
 
     //연관 관계
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL,orphanRemoval = true)
