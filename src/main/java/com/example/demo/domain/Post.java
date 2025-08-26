@@ -3,6 +3,7 @@ package com.example.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class Post {
     @Column(nullable=false, columnDefinition = "TEXT")
     private String content;
 
+    @CreatedDate
+    @Column(nullable=false)
     private LocalDateTime createdAt;
 
     // 연관 관계
