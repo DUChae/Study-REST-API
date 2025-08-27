@@ -4,6 +4,7 @@ package com.example.demo.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,9 +28,17 @@ public class Post {
     @Column(nullable=false, columnDefinition = "TEXT")
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", nullable=false)
+    private User author;
+
     @CreatedDate
     @Column(nullable=false)
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(nullable=false)
+    private LocalDateTime updatedAt;
 
     // 연관 관계
 
