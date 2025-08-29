@@ -17,10 +17,10 @@ import java.util.List;
 @Builder
 public class Post {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(nullable=false, length=100)
     private String title;
@@ -29,26 +29,20 @@ public class Post {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "author_id", nullable=false) // FK 명시
     private User author;
 
     @CreatedDate
-    @Column(nullable=false)
+    @Column(nullable=false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(nullable=false)
     private LocalDateTime updatedAt;
 
-    // 연관 관계
-
-
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
-
     @OneToMany(mappedBy="post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments=new ArrayList<>();
+
     @OneToMany(mappedBy="post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes=new ArrayList<>();
 
