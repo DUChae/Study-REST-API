@@ -12,16 +12,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     //게시글 등록
-    @Transactional
     public PostResponseDto createPost(Long userId, PostRequestDto dto){
         User user=userRepository.findById(userId)
                 .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -38,7 +40,7 @@ public class PostService {
     }
 
 
-    //게시글 조회
+    //게시글 단건 조회
     @Transactional(readOnly = true)
     public PostResponseDto getPost(Long id){
         Post post=postRepository.findById(id)
@@ -46,6 +48,30 @@ public class PostService {
         return PostResponseDto.from(post);
     }
 
+    //게시글 전체 조회
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getAllPosts(){
+        return postRepository.findAll().stream()
+                .map(PostResponseDto::from)
+                .collect(Collectors.toList());
+    }
+    //게시글 수정
+    public PostResponseDto updatePost(Long id,PostRequestDto dto){
+        Post post=postRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setUpdatedAt(LocalDateTime.now());
+        return PostResponseDto.from(post);
+    }
 
+
+    //게시글 삭제
+    public void deletePost(Long id){
+        if(!postRepository.existsById(id)){
+            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+        }
+        postRepository.deleteById(id);
+    }
 
 }
