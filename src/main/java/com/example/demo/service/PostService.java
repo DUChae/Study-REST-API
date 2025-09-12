@@ -24,8 +24,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     //게시글 등록
-    public PostResponseDto createPost(Long userId, PostRequestDto dto){
-        User user=userRepository.findById(userId)
+    public PostResponseDto createPost(String username, PostRequestDto dto){
+        User user=userRepository.findByUsername(username)
                 .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         Post post=Post.builder()
                 .title(dto.getTitle())
@@ -56,9 +56,12 @@ public class PostService {
                 .collect(Collectors.toList());
     }
     //게시글 수정
-    public PostResponseDto updatePost(Long id,PostRequestDto dto){
+    public PostResponseDto updatePost(Long id,String username,PostRequestDto dto){
         Post post=postRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        if(!post.getAuthor().getUsername().equals(username)){
+            throw new IllegalArgumentException("본인의 게시글만 수정할 수 있습니다.");
+        }
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
         post.setUpdatedAt(LocalDateTime.now());
@@ -67,10 +70,15 @@ public class PostService {
 
 
     //게시글 삭제
-    public void deletePost(Long id){
-        if(!postRepository.existsById(id)){
-            throw new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+    public void deletePost(Long id,String username){
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+
+        if(!post.getAuthor().getUsername().equals(username)){
+            throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
         }
+
         postRepository.deleteById(id);
     }
 

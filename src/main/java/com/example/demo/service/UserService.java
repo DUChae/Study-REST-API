@@ -31,8 +31,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserResponseDto getUser(Long id){
-        User user=userRepository.findById(id)
+    public UserResponseDto getUser(String username){
+        User user=userRepository.findByUsername(username)
                 .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         return UserResponseDto.builder()
                 .id(user.getId())
@@ -43,10 +43,18 @@ public class UserService {
     }
 
 
-    public void deleteUser(Long id){
-        if(!userRepository.existsById(id)){
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+    public void deleteUser(String username){
+        User user=userRepository.findByUsername(username)
+                .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
+    }
+    @Transactional
+    public User authenticateUser(String username,String password){
+        User user=userRepository.findByUsername(username)
+                .orElseThrow(()->new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        if(!passwordEncoder.matches(password,user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-        userRepository.deleteById(id);
+        return user;
     }
 }

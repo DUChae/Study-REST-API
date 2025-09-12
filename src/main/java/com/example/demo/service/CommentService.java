@@ -52,9 +52,12 @@ public class CommentService {
 
     // 댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, CommentUpdateRequestDto dto) {
+    public CommentResponseDto updateComment(Long commentId,String username, CommentUpdateRequestDto dto) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        if(!comment.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException("본인의 댓글만 수정할 수 있습니다.");
+        }
         comment.setContent(dto.getContent());
         // @Transactional에 의해 변경 내용이 자동으로 DB에 반영됩니다.
         return CommentResponseDto.fromEntity(comment);
@@ -62,9 +65,11 @@ public class CommentService {
 
     // 댓글 삭제
     @Transactional
-    public void deleteComment(Long commentId) {
-        if (!commentRepository.existsById(commentId)) {
-            throw new IllegalArgumentException("댓글을 찾을 수 없습니다.");
+    public void deleteComment(Long commentId,String username) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        if(!comment.getUser().getUsername().equals(username)){
+            throw new IllegalArgumentException("본인의 댓글만 삭제할 수 있습니다.");
         }
         commentRepository.deleteById(commentId);
     }

@@ -7,6 +7,8 @@ import com.example.demo.dto.UserResponseDto;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,15 +27,16 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id){
-        return ResponseEntity.ok(userService.getUser(id));
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDto> getUser(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(userService.getUser(userDetails.getUsername()));
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserDetails userDetails){
+        userService.deleteUser(userDetails.getUsername());
         return ResponseEntity.noContent().build();
+
     }
 }

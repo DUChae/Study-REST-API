@@ -6,6 +6,9 @@ import com.example.demo.dto.CommentUpdateRequestDto;
 import com.example.demo.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,9 +24,9 @@ public class CommentController {
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<CommentResponseDto> addComment(
             @PathVariable Long postId,
-            @RequestParam String username,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody CommentRequestDto dto) {
-        CommentResponseDto commentDto = commentService.addComment(postId, username, dto);
+        CommentResponseDto commentDto = commentService.addComment(postId, userDetails.getUsername(), dto);
         return ResponseEntity.ok(commentDto);
     }
 
@@ -37,14 +40,16 @@ public class CommentController {
     @PatchMapping("/comments/{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(
             @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody CommentUpdateRequestDto dto) {
-        return ResponseEntity.ok(commentService.updateComment(commentId, dto));
+        return ResponseEntity.ok(commentService.updateComment(commentId,userDetails.getUsername() ,dto));
     }
 
     // 댓글 삭제
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,
+                                              @AuthenticationPrincipal UserDetails userDetails) {
+        commentService.deleteComment(commentId,userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 }

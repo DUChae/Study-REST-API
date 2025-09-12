@@ -6,6 +6,8 @@ import com.example.demo.dto.PostResponseDto;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +20,9 @@ public class PostController {
     private final PostService postService;
     //게시글 등록
     @PostMapping
-    public ResponseEntity<PostResponseDto> createPost(@RequestParam Long userId,
+    public ResponseEntity<PostResponseDto> createPost(@AuthenticationPrincipal UserDetails userDetails,
                                                       @RequestBody PostRequestDto dto){
-        return ResponseEntity.ok(postService.createPost(userId,dto));
+        return ResponseEntity.ok(postService.createPost(userDetails.getUsername(),dto));
     }
 
     //게시글 단건 조회
@@ -38,13 +40,14 @@ public class PostController {
     //게시글 수정
     @PutMapping("/{id}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
+                                                      @AuthenticationPrincipal UserDetails userDetails,
                                                       @RequestBody PostRequestDto dto){
-        return ResponseEntity.ok(postService.updatePost(id,dto));
+        return ResponseEntity.ok(postService.updatePost(id,userDetails.getUsername(),dto));
     }
     //게시글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id){
-        postService.deletePost(id);
+    public ResponseEntity<Void> deletePost(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
+        postService.deletePost(id,userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 }
