@@ -78,7 +78,7 @@ Swagger UI를 통해 프로젝트의 모든 API를 확인할 수 있습니다.
 - 댓글 작성/조회/수정/삭제 및 게시글 좋아요 토글
 
 ### 5. Schema
-![Swagger - Schema](./images/Schema.png)
+![Swagger - Schema](./images/Schemas.png)
 - 요청(Request)과 응답(Response) 모델 구조 확인
 ---
 
