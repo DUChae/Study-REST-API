@@ -92,8 +92,6 @@ API는 RESTful 규칙에 따라 설계하였으며 Postman을 통한 테스트�
 | --- | --- | --- | --- | --- | --- |
 | 좋아요 추가/취소 (토글) | POST | /api/posts/{postId}/likes | 없음 | 200 OK + `{ "liked": true/false, "likeCount": 5 }` | ✅ |
 | 좋아요 개수 조회 | GET | /api/posts/{postId}/likes/count | 없음 | 200 OK + `{ "likeCount": 5 }` | ❌ |
-> API 설계는 RESTful 규칙에 맞게 작성되었으며, Swagger 적용을 통해 문서화할 수 있습니다.
-
 
 ---
 ## 📜 Swagger API 문서
