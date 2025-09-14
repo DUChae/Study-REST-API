@@ -5,6 +5,7 @@ import com.example.demo.domain.Post;
 import com.example.demo.dto.PostRequestDto;
 import com.example.demo.dto.PostResponseDto;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.service.LikeService;
 import com.example.demo.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class PostController {
 
     private final PostService postService;
     private final PostRepository postRepository;
+    private final LikeService likeService;
+
     //게시글 등록
     @PostMapping
     public ResponseEntity<PostResponseDto> createPost(@AuthenticationPrincipal UserDetails userDetails,
@@ -59,4 +62,29 @@ public class PostController {
         postService.deletePost(id,userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
+
+    //Like method
+
+    //Like
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable Long id,
+                                         @AuthenticationPrincipal UserDetails userDetails){
+        likeService.likePost(id,userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+    //Delete Like
+    @DeleteMapping("/{id}/like")
+    public ResponseEntity<Void> unlikePost(@PathVariable Long id,
+                                           @AuthenticationPrincipal UserDetails userDetails){
+        likeService.unlikePost(id,userDetails.getUsername());
+        return ResponseEntity.noContent().build();
+    }
+    //Count Like
+    @GetMapping("/{id}/like")
+    public ResponseEntity<Long> getLikes(@PathVariable Long id){
+        return ResponseEntity.ok(likeService.countLikes(id));
+    }
+
+
 }
