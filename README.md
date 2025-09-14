@@ -52,9 +52,49 @@ API는 RESTful 규칙에 따라 설계하였으며 Postman을 통한 테스트�
 
 ## 📑 API 명세서
 
+### 1. 회원(User)
+
+| 기능 | Method | URL | Request Body | Response | 인증 |
+| --- | --- | --- | --- | --- | --- |
+| 회원가입 | POST | /api/users/signup | `{ "username": "test", "password": "1234", "email": "test@test.com" }` | 201 Created + User 정보 | ❌ |
+| 로그인 | POST | /api/users/login | `{ "username": "test", "password": "1234" }` | 200 OK + `{ "token": "JWT" }` | ❌ |
+| 내 정보 조회 | GET | /api/users/me | 없음 | 200 OK + User 정보 | ✅ |
+| 회원 탈퇴 | DELETE | /api/users/me | 없음 | 204 No Content | ✅ |
+
+---
+
+### 2. 게시글(Post)
+
+| 기능 | Method | URL | Request Body | Response | 인증 |
+| --- | --- | --- | --- | --- | --- |
+| 게시글 작성 | POST | /api/posts | `{ "title": "제목", "content": "내용" }` | 201 Created + Post 정보 | ✅ |
+| 게시글 목록 조회 | GET | /api/posts | 없음 | 200 OK + `[ {id, title, content, author, createdAt} ]` | ❌ |
+| 게시글 상세 조회 | GET | /api/posts/{postId} | 없음 | 200 OK + Post 정보 | ❌ |
+| 게시글 수정 | PUT | /api/posts/{postId} | `{ "title": "수정 제목", "content": "수정 내용" }` | 200 OK + Post 정보 | ✅ |
+| 게시글 삭제 | DELETE | /api/posts/{postId} | 없음 | 204 No Content | ✅ |
+
+---
+
+### 3. 댓글(Comment)
+
+| 기능 | Method | URL | Request Body | Response | 인증 |
+| --- | --- | --- | --- | --- | --- |
+| 댓글 작성 | POST | /api/posts/{postId}/comments | `{ "content": "댓글 내용" }` | 201 Created + Comment 정보 | ✅ |
+| 댓글 목록 조회 | GET | /api/posts/{postId}/comments | 없음 | 200 OK + `[ {id, content, author, createdAt} ]` | ❌ |
+| 댓글 수정 | PUT | /api/comments/{commentId} | `{ "content": "수정 댓글" }` | 200 OK + Comment 정보 | ✅ |
+| 댓글 삭제 | DELETE | /api/comments/{commentId} | 없음 | 204 No Content | ✅ |
+
+---
+
+### 4. 좋아요(Like)
+
+| 기능 | Method | URL | Request Body | Response | 인증 |
+| --- | --- | --- | --- | --- | --- |
+| 좋아요 추가/취소 (토글) | POST | /api/posts/{postId}/likes | 없음 | 200 OK + `{ "liked": true/false, "likeCount": 5 }` | ✅ |
+| 좋아요 개수 조회 | GET | /api/posts/{postId}/likes/count | 없음 | 200 OK + `{ "likeCount": 5 }` | ❌ |
 > API 설계는 RESTful 규칙에 맞게 작성되었으며, Swagger 적용을 통해 문서화할 수 있습니다.
 
-👉 [API 명세서 보기](./API_SPEC.md)
+
 ---
 ## 📜 Swagger API 문서
 
