@@ -62,23 +62,23 @@ Swagger UI를 통해 프로젝트의 모든 API를 확인할 수 있습니다.
 인증, 회원, 게시글, 댓글/좋아요, 요청/응답 모델(Schema)까지 한눈에 볼 수 있습니다.
 
 ### 1. Auth
-![Swagger - Auth](./images/swagger_auth.png)
+![Swagger - Auth](./images/Auth.png)
 - 로그인(JWT 발급), 회원가입 등 인증 관련 API
 
 ### 2. User
-![Swagger - User](./images/swagger_user.png)
+![Swagger - User](./images/User.png)
 - 회원 조회, 회원 탈퇴 등 User 관련 API
 
 ### 3. Post
-![Swagger - Post](./images/swagger_post.png)
+![Swagger - Post](./images/Post.png)
 - 게시글 작성, 조회, 수정, 삭제 등 Post 관련 API
 
-### 4. Comment & Like
-![Swagger - Comment & Like](./images/swagger_comment_like.png)
+### 4. Comment
+![Swagger - Comment & Like](./images/Comment.png)
 - 댓글 작성/조회/수정/삭제 및 게시글 좋아요 토글
 
 ### 5. Schema
-![Swagger - Schema](./images/swagger_schema.png)
+![Swagger - Schema](./images/Schema.png)
 - 요청(Request)과 응답(Response) 모델 구조 확인
 ---
 
